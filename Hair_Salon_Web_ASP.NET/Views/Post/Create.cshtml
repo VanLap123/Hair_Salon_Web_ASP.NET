@@ -1,0 +1,43 @@
+﻿@model Hair_Salon_Web_ASP.NET.Models.Post
+<head>
+    <link rel="stylesheet" href="~/style.css">
+</head>
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<div class="row card align-content-center" style="background-color:lightgrey">
+    <div class="col-md-4 card-body" style="background-color:#EEE8AA">
+        <h1 class="lable text-center mb-3">Create New Post</h1>
+        <form asp-action="Create" asp-controller="Post" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-2">
+                <label  class="control-label lable">Enter The Title(*):</label>
+                <input asp-for="title" placeholder="Title" class="form-control" />
+                <span asp-validation-for="title" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label  class="control-label lable">Choose Image(*):</label>
+                <input type="file" asp-for="ImageFile" class="form-control" />
+                <span asp-validation-for="post_image" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label  class="control-label lable">Enter Descripton:</label>
+                <textarea asp-for="description" class="form-control form-control-lg" rows="5" style="overflow-y: auto;"></textarea>
+                <span asp-validation-for="description" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

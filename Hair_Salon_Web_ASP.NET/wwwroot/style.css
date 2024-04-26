@@ -1,0 +1,39 @@
+﻿.header {
+    margin-top: 200px;
+}
+.lable{
+    color:black;
+    font-weight:bold;
+}
+
+.a {
+    text-decoration: none;
+}
+.appoinment_form{
+    border-style:dotted;
+}
+.bg-image-vertical {
+    position: relative;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: auto 100%;
+}
+
+@media (min-width: 1025px) {
+    .h-custom-2 {
+        height: 100%;
+    }
+}
+
+.card-registration .select-input.form-control[readonly]:not([disabled]) {
+    font-size: 1rem;
+    line-height: 2.15;
+    padding-left: .75em;
+    padding-right: .75em;
+}
+
+.card-registration .select-arrow {
+    top: 13px;
+}
+

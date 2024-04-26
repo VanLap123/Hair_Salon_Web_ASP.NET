@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<body>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4 mt-3 mb-5">
+        <div class="col">
+            <div class="card">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <form asp-action="Index" asp-controller="Chart" method="get">
+                         
+                            <div data-mdb-input-init class="form-outline ms-3 mt-2 mb-4">
+                                <label class="control-label text-black">Choose Starting Time:</label>
+                                <input type="date" class="form-control" placeholder="" aria-label="Search" name="startTime">
+                                <label class="control-label text-black">Choose Ending Time:</label>
+                                <input type="date" class="form-control" placeholder="" aria-label="Search" name="endTime">
+                                <button class="bg-black text-white" type="submit">Filter</button>
+                            </div>
+                        </form>
+                        
+                    </div>
+                </div>
+                <canvas id="myChart12" style="width:100%;max-width:600px"></canvas>
+
+                <script>
+                    var xValues = @Html.Raw(Json.Serialize(ViewBag.ListKey));
+                    var yValues = @Html.Raw(Json.Serialize(ViewBag.ListValue));
+           
+                    var barColors = ["red", "green", "blue"];
+
+                    new Chart("myChart12", {
+                        type: "bar",
+                        data: {
+                            labels: xValues,
+                            datasets: [{
+                                backgroundColor: barColors,
+                                data: yValues
+                            }]
+                        },
+                        options: {
+                            legend: { display: false },
+                            title: {
+                                display: true,
+                                text: "Working Time of Employee for Customer"
+                            }
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-6">
+                        <form asp-action="Index" asp-controller="Chart" method="get">
+
+                            <div data-mdb-input-init class="form-outline ms-3 mt-2 mb-4">
+                                <label class="control-label text-black">Choose Starting Time:</label>
+                                <input type="date" class="form-control" placeholder="" aria-label="Search" name="startTime1">
+                                <label class="control-label text-black">Choose Ending Time:</label>
+                                <input type="date" class="form-control" placeholder="" aria-label="Search" name="endTime1">
+                                <button class="bg-black text-white" type="submit">Filter</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+                <canvas id="myChart1" style="width:100%;max-width:600px"></canvas>
+
+                <script>
+                    var xValues = @Html.Raw(Json.Serialize(ViewBag.ListKeyName));
+                    var yValues = @Html.Raw(Json.Serialize(ViewBag.ListValueNumber));
+                    var barColors = ["red", "green", "blue"];
+
+                    new Chart("myChart1", {
+                        type: "bar",
+                        data: {
+                            labels: xValues,
+                            datasets: [{
+                                backgroundColor: barColors,
+                                data: yValues
+                            }]
+                        },
+                        options: {
+                            legend: { display: false },
+                            title: {
+                                display: true,
+                                text: "The tendency for customers to choose employees"
+                            }
+                        }
+                    });
+                </script>
+
+
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
+
+
+
+
+
+

@@ -1,0 +1,117 @@
+﻿@model IEnumerable<AppointmentUserInfo>
+<head>
+    <link rel="stylesheet" href="~/style.css">
+</head>
+@{
+    ViewData["Title"] = "Index";
+}
+<h1 class="lable">Manage Appointment</h1>
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Index" asp-controller="Appointment" method="get">
+            <div class="input-group mt-5 ms-2">
+                <input type="search" style="width:17rem;height:40px" placeholder="Customer Phone Number" aria-label="Search" name="phoneNumber">
+                <button class="bg-black text-white" type="submit">Search</button>
+            </div>
+        </form>
+        <label style="color:red">@ViewBag.SearchMessage</label>
+    </div>
+    <div class="col-md-6">
+        <form asp-action="Index" asp-controller="Appointment" method="get">
+            <div class="input-group mt-5">
+                <input type="date" style="width:17rem;height:40px" placeholder="Filtering By Date" aria-label="Search" name="date">
+                <button class="bg-black text-white" type="submit">Filter</button>
+            </div>
+        </form>
+        <label style="color:red">@ViewBag.SearchMessageDate</label>
+    </div>
+</div>
+
+<div>
+    <a asp-action="CreateAppointment" asp-controller="Appointment" class="mt-3">
+        <img style="width:60px;height:60px" src="~/images/plus.png" alt="Create New" />
+    </a>
+
+</div>   
+<div class="table-responsive">
+    <table class="table table-bordered" style="margin-bottom:200px">
+        <thead>
+            <tr class="text-center">
+                <th scope="col">
+                    Date
+                </th>
+                <th scope="col">
+                    Booking Time
+                </th>
+                <th scope="col">
+                    Finish Time
+                </th>
+                <th scope="col">
+                    Status
+                </th>
+                <th scope="col">
+                    Employee Name
+                </th>
+                <th scope="col">
+                    Customer Name
+                </th>
+                <th scope="col">
+                    Service Name
+                </th>
+                <th scope="col">Cancel</th>
+                <th scope="col">Edit || Delete</th>
+                <th scope="col">Done</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Date
+                    </td>
+                    <td>
+                        @item.BookingTime
+                    </td>
+                    <td>
+                        @item.FinishTime
+                    </td>
+                    <td>
+                        @item.Status
+                    </td>
+                    <td>
+                        @item.EmployeeName
+                    </td>
+                    <td>
+                        @item.BookedUserName
+                    </td>
+                    <td>
+                        @item.ServiceName
+                    </td>
+                    <td>
+                       
+                        <a asp-action="Refuse" asp-route-app_id="@item.app_id" style="text-decoration:none">
+                            <img style="width:40px;height:40px" src="~/images/rejected.png" alt="" />
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-app_id="@item.app_id" style="text-decoration:none">
+                            <img style="width:40px;height:40px" src="~/images/edit.png" alt="" />
+                        </a>
+                        ||
+                        <a asp-action="Delete" asp-route-app_id="@item.app_id" onclick="return confirm('Do you want to delete this appointment?')">
+                            <img style="width:40px;height:40px" src="~/images/delete.png" alt="" />
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-action="Done" asp-route-app_id="@item.app_id" style="text-decoration:none" onclick="return confirm('Do you want to delete this appointment?')">
+                            <img style="width:40px;height:40px" src="~/images/ready.png" alt="" />
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+</div>

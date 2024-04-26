@@ -1,0 +1,57 @@
+﻿@model Hair_Salon_Web_ASP.NET.Models.Service
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<head>
+    <link rel="stylesheet" href="~/style.css">
+</head>
+
+<div class="row lable card align-content-center" style="background-color:lightgrey">
+    <div class="col-md-4 card-body" style="background-color:#EEE8AA">
+        <h1 class="lable text-center mb-3">Update Service</h1>
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+      
+                <input type="hidden" asp-for="ser_id" class="form-control" />
+              
+        
+            <div class="form-group mb-2">
+                <label class="control-label">Enter Service Name: </label>
+                <input asp-for="name" class="form-control" />
+                <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label class="control-label">Enter Price:</label>
+                <input asp-for="price" class="form-control" />
+                <span asp-validation-for="price" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label class="control-label lable">Choose Image:</label>
+                <input type="file" asp-for="ImageFile" class="form-control" />
+                <span asp-validation-for="ser_image" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label class="control-label">Enter Time To Finish:</label>
+                <input asp-for="time_to_cut" class="form-control" />
+                <span asp-validation-for="time_to_cut" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label class="control-label">Enter Description:</label>
+                <textarea asp-for="description" class="form-control form-control-lg" rows="5" style="overflow-y: auto;"></textarea>
+                <span asp-validation-for="description" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <input type="submit" value="Update" class="btn btn-primary mx-auto" />
+            </div>
+        </form>
+    </div>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

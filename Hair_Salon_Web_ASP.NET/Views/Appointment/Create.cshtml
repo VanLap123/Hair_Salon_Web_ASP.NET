@@ -1,0 +1,136 @@
+﻿@model Hair_Salon_Web_ASP.NET.Models.Appointment
+<head>
+    <link rel="stylesheet" href="@Url.Content("~/style.css")">
+</head>
+@{
+    ViewData["Title"] = "Create";
+}
+<section class="">
+    <div class="px-4 py-5 px-md-5 text-center text-lg-start" style="background-color: hsl(0, 0%, 96%)">
+        <div class="container">
+            <div class="row gx-lg-5 align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <h1 class="my-5 display-3 fw-bold ls-tight lable">
+                        The best offer <br />
+                        <span class="text-primary">Let's Book Now'</span>
+                    </h1>
+                    <p style="color: hsl(217, 10%, 50.8%)">
+                        Online booking offers a world of convenience. You can browse and secure appointments, fitting bookings into your busy schedule. No more waiting on holding or playing phone tag! This streamlined process saves you time and ensures you lock in the perfect time slot.
+                    </p>
+                </div>
+
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <div class="card" style="background-color:lightgrey">
+                        <div class="card-body py-5 px-md-5 lable">
+                            <form asp-action="Create">
+                                <h1 class="text-center text-black " style="font-size:35px; font-style:initial">Book Now</h1>
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div data-mdb-input-init class="form-outline mb-4">
+                                    <label class="control-label">Choose Service(*):</label>
+                                    <select asp-for="ser_id" class="form-control" asp-items="ViewBag.ser_id">
+                                        <option value="">Select Service</option>
+                                    </select>
+                                    <span asp-validation-for="ser_id" class="text-danger"></span>
+                                </div>
+
+                                
+                                <div data-mdb-input-init class="form-outline mb-4">
+                                    <label class="control-label">Choose Hairdresser(*):</label>
+                                    <select asp-for="emp_id_chosen" class="form-control">
+                                        <option value="" selected>Select Hairdresser</option> 
+                                        <option value="1">Chosen By Shop</option>
+                                        @{
+                                            foreach (User employee in (List<User>)ViewData["emp_list"])
+                                            {
+                                                    <option value="@employee.user_id">@employee.name</option>
+                                            }
+                                        }
+
+                                    </select>
+                                    <span asp-validation-for="emp_id_chosen" class="text-danger"></span>
+                                </div>
+                            
+                                <div data-mdb-input-init class="form-outline mb-4">
+                                    <label class="control-label">Choose Date(*):</label>
+                                    <input type="date" asp-for="date" class="form-control" />
+                                    <span asp-validation-for="date" class="text-danger"></span>
+                                </div>
+                              
+                                <div data-mdb-input-init class="form-outline mb-4">
+                                    <label class="control-label">Choose Time(*):</label>
+                                    <select asp-for="booking_time" class="form-control" id="timeDropdown">
+                                        <option value="">Select Time</option>
+                                        @{
+                                            List<string> availableTimes = new List<string> { "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00" };
+                                            foreach (var time in availableTimes)
+                                            {
+                                                    <option value="@time">@time</option>
+                                            }
+                                        }
+                                    </select>
+                                    <span asp-validation-for="booking_time" class="text-danger"></span>
+                                </div>
+
+                                
+                                <button type="submit" value="Create" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">
+                                    Submit
+                                </button>
+
+                              
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Jumbotron -->
+</section>
+<!-- Section: Design Block -->
+<script>
+    // Bắt sự kiện khi người dùng thay đổi ngày
+    document.getElementById("date").addEventListener("change", function () {
+        // Lấy ngày được chọn
+        var selectedDate = this.value;
+        var empIdChosen = document.getElementById("emp_id_chosen").value;
+        // Gọi phương thức GetBookedTimes trong controller bằng cách sử dụng AJAX
+        get(selectedDate, empIdChosen)
+  
+    });
+
+    document.getElementById("emp_id_chosen").addEventListener("change", function () {
+        // Lấy ngày được chọn
+        var empIdChosen = this.value;
+        var selectedDate = document.getElementById("date").value;
+            // Gọi phương thức GetBookedTimes trong controller bằng cách sử dụng AJAX
+        get(selectedDate, empIdChosen)
+
+    });
+
+    function get(selectedDate, empIdChosen) {
+        fetch('/Appointment/GetBookedTimes?selectedDate=' + selectedDate + '&empIdChosen=' + empIdChosen)
+            .then(response => response.json())
+            .then(bookedTimes => {
+                // Đánh dấu các thời gian đã được đặt như là disabled trong dropdown
+                var timeDropdown = document.getElementById("timeDropdown");
+                var options = timeDropdown.options;
+
+                for (var i = 0; i < options.length; i++) {
+
+                    if (bookedTimes.includes(options[i].value)) {
+                        options[i].disabled = true;
+                        options[i].style.color = 'red'
+                    } else {
+                        options[i].disabled = false;
+                        options[i].style.color = 'green'
+                    }
+                }
+            });
+    }
+
+</script>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

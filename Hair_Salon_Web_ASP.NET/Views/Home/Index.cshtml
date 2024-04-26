@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Hair_Salon_Web_ASP.NET.Models.Post>
+<head>
+
+    <link rel="stylesheet" href="@Url.Content("~/style.css")">
+
+    @{
+        ViewData["Title"] = "Home Page";
+    }
+    <style>
+
+    </style>
+</head>
+@if (ViewData["SuccessMessage"] != null)
+{
+    <div id="successMessage" class="alert alert-success mt-1 text-center" style="font-size:20px">
+        @ViewData["SuccessMessage"]
+    </div>
+}
+
+<script>
+
+    setTimeout(function () {
+        var successMessage = document.getElementById('successMessage');
+        if (successMessage !== null) {
+            successMessage.style.display = 'none';
+        }
+    }, 3000); 
+</script>
+<body>
+    <form asp-action="Index" asp-controller="Home" method="get">
+        <div class="input-group mt-2 mb-3 ms-3">
+            <input type="search" style="width:19rem;height:43px" placeholder="Search By Title" aria-label="Search" name="title">
+            <button class="bg-black text-white" type="submit">Search</button>
+        </div>
+    </form>
+    <h4 class="" style="color:red">@ViewBag.SearchMessage</h4>
+
+  
+    @foreach (var post in Model)
+    {
+        <div class="container mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title text-black">@post.title</h2>
+                    <h5 class="card-subtitle mb-2 text-primary">@post.date</h5>
+                    <p class="card-text text-black">@post.description</p>
+                    <img class="card-img-top img-fluid d-block" src="~/Posts/@post.post_image" alt="Card image">
+                </div>
+            </div>
+        </div>
+    }
+</body>
+

@@ -1,0 +1,69 @@
+﻿@model Hair_Salon_Web_ASP.NET.Models.User
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<head>
+    <link rel="stylesheet" href="~/style.css">
+</head>
+<div class="row card align-content-center" style="background-color:lightgrey">
+    <div class="col-md-4 card-body" style="background-color:#EEE8AA">
+        <h1 class="lable text-center mb-3"> Update User</h1>
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for=user_id class="form-control" />
+            <div class="form-group mb-2">
+                <label class="control-label lable">Enter phone Number(*):</label>
+                <input asp-for="phone_number" class="form-control" />
+                <span asp-validation-for="phone_number" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label class="control-label lable">Enter Password(*):</label>
+                <input asp-for="password" class="form-control" />
+                <span asp-validation-for="password" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label class="control-label lable lable">Choose Role(*):</label>
+                <select asp-for="role" class="form-control">
+                    <option value="Client">Client</option>
+                    <option value="Employee">Employee</option>
+                    <option value="Admin">Admin</option>
+                </select>
+                <span asp-validation-for="role" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label class="control-label lable">Enter Name(*):</label>
+                <input asp-for="name" class="form-control" />
+                <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label class="control-label lable">Enter Gender(*):</label>
+                <select asp-for="gender" class="form-control">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+                <span asp-validation-for="gender" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label class="control-label lable">Enter Address(*):</label>
+                <input asp-for="address" class="form-control" />
+                <span asp-validation-for="address" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label class="control-label lable">Enter Description</label>
+                <textarea asp-for="about_user" class="form-control form-control-lg" rows="5" style="overflow-y: auto;"></textarea>
+                <span asp-validation-for="about_user" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Update" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

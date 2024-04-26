@@ -1,0 +1,227 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+@using Microsoft.AspNetCore.Http
+@using Hair_Salon_Web_ASP.NET.UserFilters
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Hair salon</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/styles.css" asp-append-version="true" />
+    <!-- Bootstrap CSS -->
+    <link href= "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> 
+    <!-- Font Awesome -->
+    <link href= "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> 
+
+    <link rel="stylesheet" href="@Url.Content("~/style.css")">
+    <style>
+        body {
+            color: white;
+        }
+
+        .footer {
+            position: relative !important;
+            background-color: #000000;
+        }
+        .footer-content h2 {
+            color: #fff;
+        }
+
+        .footer-content h5,
+        .footer-content p,
+        .footer-links a {
+            color: #fff;
+        }
+
+            .footer-links a:hover {
+                text-decoration: underline;
+            }
+
+        .footer hr {
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><img src="~/images/iconHairSalon.png" alt="Account" width="30" height="30"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+
+                    <li class="nav-item dropdown" id="adminFunction" style="display: none;">
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Management</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Index">Manage User</a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                 <li>
+                                <a class="dropdown-item" asp-area="" asp-controller="Service" asp-action="Index">Manage Service</a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                            <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Appointment" asp-action="Index">Manage Appointment</a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Post" asp-action="Index">Manage post</a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Chart" asp-action="Index">Manage statistics</a>
+                                </li>
+                            </ul>
+                     </li>
+                  
+                    <li class="nav-item" id="clientFunction" style="display: none;">
+                       
+                        <a class="nav-link active" aria-current="page" asp-area="" asp-controller="Appointment" asp-action="ShowAppointmentCurrent">Your Appointments</a>
+                    </li>
+                    
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" asp-area="" asp-controller="Appointment" asp-action="Create">Booking haircut</a>
+                        </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" asp-area="" asp-controller="Services" asp-action="Index">Services</a>
+                    </li>
+
+
+                    <li class="nav-item" id="employeeFunction" style="display: none;">
+                            <a class="nav-link active" aria-current="page" asp-area="" asp-controller="Appointment" asp-action="ShowTaskEmployee">Tasks</a>
+                        </li>
+                    
+                    <li class="nav-item" data-id="">
+                        <a class="nav-link active" aria-current="page" asp-area="" asp-controller="AboutUs" asp-action="Index"> About us </a>
+                    </li>
+                    <li class="nav-item" data-id="">
+                        <a class="nav-link active" aria-current="page" asp-area="" asp-controller="AboutUs" asp-action="Terms"> Terms & Policies </a>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    
+  
+                    @{
+                        if (ViewBag.phone_number == null)
+                        {
+     
+                                    <button type="submit"  asp-area="" asp-controller="Login" asp-action="Index" class="btn btn-outline-light me-2" style="width: 11rem;">Login</button>
+                           
+                                    <button type="submit" asp-area="" asp-controller="Register" asp-action="Create" class="btn btn-warning" style="width: 11rem;">Sign-up</button>
+                            
+                        }
+                    }
+                    @{
+                        if (ViewBag.phone_number != null)
+                        {
+                                <a class="nav-link text-white card-body" style="width: 10rem;" asp-area="" asp-controller="Profile" asp-action="ViewProfile" asp-route-phone_number="@ViewBag.phone_number"><img src="~/images/user.png" alt="Account" width="30" height="30">@ViewBag.phone_number </a>
+                        
+                          
+                           
+                        
+                        }
+                    }
+                </form>
+            </div>
+        </div>
+    </nav>
+   
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="footer p-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h2>LuckyHairSalon</h2>
+                </div>
+                <div class="col-md-3">
+                    <h5>About Us</h5>
+                    <p style="text-wrap: wrap">
+                      This a salon provides solutions for your hair and make you better
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Contact Us</h5>
+                    <ul class="list-unstyled">
+                        <li>Email: lapnvgcc200247@fpt.edu.vn</li>
+                        <li>Phone: 0901278074</li>
+                        <li>Address: 30/4 Street, Can Tho City</li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Follow Us</h5>
+                    <ul class="list-inline footer-links">
+                        <li class="list-inline-item">
+                            <a href="#">
+                                <i class="fab fa-facebook"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-6">
+                    <p>© 2024 Your Website. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-end">
+            
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    @{
+
+    }
+    <script>
+        var role = "@ViewBag.role";
+      
+        if (role === "Admin") {
+            document.getElementById("adminFunction").style.display = "block";
+        } else if (role === "Client") {
+            document.getElementById("clientFunction").style.display = "block";
+        } else if (role=== "Employee") {
+            document.getElementById("employeeFunction").style.display = "block";
+        }
+      
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,52 @@
+﻿@model IEnumerable<AppointmentUserInfo>
+
+@{
+    ViewData["Title"] = "ShowCanceledHistory";
+}
+
+<h1 class="text-black mt-2 mb-4"> History Of Canceled Appointments</h1>
+<a class="mt-2 mb-2" asp-action="ShowAppointmentCurrent" asp-controller="Appointment">
+    <button type="submit" class="btn btn-dark mt-2 mb-2" style="width: 11rem;">Back</button>
+</a>
+<table class="table table-bordered" style="margin-bottom:450px">
+    <thead>
+        <tr>
+            <th scope="col">
+                Date
+            </th>
+            <th scope="col">
+                Booking Time
+            </th>
+            <th scope="col">
+                Employee Name
+            </th>
+            <th scope="col">
+                Service Name
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Date
+                </td>
+                <td>
+                    @item.BookingTime
+                </td>
+           
+
+                <td>
+                    @item.EmployeeName
+                </td>
+                <td>
+                    @item.ServiceName
+                </td>
+              
+            </tr>
+        }
+    </tbody>
+</table>
+
+
