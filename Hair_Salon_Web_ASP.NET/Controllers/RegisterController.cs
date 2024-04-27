@@ -36,7 +36,7 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("ConfirmPassword", "Passwords must match.");
+                        ModelState.AddModelError("ConfirmPassword", "Password and Confirm Password is not match");
                         return View(user);
                     }
 

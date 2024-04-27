@@ -22,12 +22,13 @@
                         
                     </div>
                 </div>
+                <h5 class="text-black ms-3">Total Revenue Of Salon: @ViewBag.Total million VND</h5>
                 <canvas id="myChart12" style="width:100%;max-width:600px"></canvas>
 
                 <script>
-                    var xValues = @Html.Raw(Json.Serialize(ViewBag.ListKey));
-                    var yValues = @Html.Raw(Json.Serialize(ViewBag.ListValue));
-           
+                   
+                    var xValues = ["Ho Kien Vinh", "Nguyen Ngoc Duy Chuong", "Nguyen Nhat Khang"];
+                    var yValues = JSON.parse('@Html.Raw(Json.Serialize(ViewBag.ListValue))');
                     var barColors = ["red", "green", "blue"];
 
                     new Chart("myChart12", {
@@ -43,7 +44,7 @@
                             legend: { display: false },
                             title: {
                                 display: true,
-                                text: "Working Time of Employee for Customer"
+                                text: "The total amount of money each employee brings to the Salon"
                             }
                         }
                     });
@@ -67,14 +68,14 @@
 
                     </div>
                 </div>
-                <canvas id="myChart1" style="width:100%;max-width:600px"></canvas>
+                <canvas id="myChart2" style="width:100%;max-width:600px"></canvas>
 
                 <script>
-                    var xValues = @Html.Raw(Json.Serialize(ViewBag.ListKeyName));
-                    var yValues = @Html.Raw(Json.Serialize(ViewBag.ListValueNumber));
-                    var barColors = ["red", "green", "blue"];
+                    var xValues = ["Ho Kien Vinh", "Nguyen Ngoc Duy Chuong", "Nguyen Nhat Khang"];
+                    var yValues = [5, 14, 3];
+                    var barColors = ["red", "green", "blue", "orange", "brown"];
 
-                    new Chart("myChart1", {
+                    new Chart("myChart2", {
                         type: "bar",
                         data: {
                             labels: xValues,
@@ -87,7 +88,7 @@
                             legend: { display: false },
                             title: {
                                 display: true,
-                                text: "The tendency for customers to choose employees"
+                                text: "Trend of customers choosing Hairdresser"
                             }
                         }
                     });

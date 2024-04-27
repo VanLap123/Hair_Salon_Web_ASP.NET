@@ -10,29 +10,26 @@ namespace Hair_Salon_Web_ASP.NET.Repository
         {
             _db = db;
         }
-        public Dictionary<string,int> GetEmployeeWithNumberAppointment(DateTime startTime, DateTime endTime)
+        public Dictionary<string,float> GetEmployeeWithNumberAppointment(DateTime startTime, DateTime endTime)
         {
-            Dictionary<string, int> lstEmployee = new Dictionary<string, int>();
+            Dictionary<string, float> lstEmployee = new Dictionary<string, float>();
             List<User> userList = GetEmployee();
             foreach (User user in userList)
             {
-                List<Appointment> appointments = _db.Appointments.Where(e => e.emp_id_chosen==user.user_id&& e.date >= startTime && e.date <= endTime  && e.status == "Finished").ToList();
+                List<AppointmentUserInfo> appointments = GetAppointmentUserInfoList().Where(e => e.EmployeeIDChosen==user.user_id && e.Date >= startTime && e.Date <= endTime  && e.Status == "Finished").ToList();
                 if(appointments.Count > 0)
                 {
-                    int totalHours = 0;
-                    foreach (Appointment appointment in appointments)
+                    float income = 0;
+                    foreach (AppointmentUserInfo appointment in appointments)
                     {
-                        Service service = _db.Services.Where(a => a.ser_id == appointment.ser_id).FirstOrDefault();
-                        totalHours = totalHours + service.time_to_cut;
-
+                        income =income + float.Parse(appointment.Price);
                     }
-                    lstEmployee.Add(user.name, totalHours);
+                    lstEmployee.Add(user.name, income);
                 }
                 else
                 {
                     lstEmployee.Add(user.name, 0);
                 }      
-                
             }
             return lstEmployee;
         }
@@ -171,7 +168,8 @@ namespace Hair_Salon_Web_ASP.NET.Repository
                                                                      BookedUserName = bookedUser != null ? bookedUser.name : "Not booked",
                                                                      EmployeeIDChosen =appointment.emp_id_chosen,
                                                                      UserIDBooked = (int)appointment.user_id_book,
-                                                                     ServiceName = service.name
+                                                                     ServiceName = service.name,
+                                                                     Price = service.price,
                                                                  }).ToList();
 
             return appointmentUserInfoList;

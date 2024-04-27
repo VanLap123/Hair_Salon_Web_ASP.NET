@@ -14,6 +14,8 @@
             public string EmployeeName { get; set; }
             public string ServiceName { get; set; }
             public string BookedUserName { get; set; }
+            public string Price { get; set; }
+
 
         
 

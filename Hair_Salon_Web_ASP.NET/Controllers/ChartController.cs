@@ -18,17 +18,13 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
         {
             ViewBag.role = HttpContext.Session.GetString("role");
             ViewBag.phone_number = HttpContext.Session.GetString("phone_number");
-            if ( startTime!=null || endTime !=null) 
+            if ( startTime.Date != DateTime.MinValue && endTime.Date != DateTime.MinValue) 
             {
-                Dictionary<string, int> listKeyWithMinutes = _repo.GetEmployeeWithNumberAppointment(startTime, endTime);
+                Dictionary<string, float> listPriceEmployee = _repo.GetEmployeeWithNumberAppointment(startTime, endTime);
                 List<string> listKey = new List<string>();
-                List<int> listValue = new List<int>();
-                Dictionary<string, int> listKeyAndHours = new Dictionary<string, int>();
-                foreach (var item in listKeyWithMinutes)
-                {
-                    listKeyAndHours.Add(item.Key, item.Value / 60);
-
-                }
+                List<float> listValue = new List<float>();
+                Dictionary<string, float> listKeyAndHours = new Dictionary<string, float>();
+               
                 foreach (var item in listKeyAndHours)
                 {
                     listKey.Add(item.Key);
@@ -36,10 +32,12 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
                 }
                 ViewBag.ListKey = listKey;
                 ViewBag.ListValue = listValue;
+                ViewBag.ListValue = new List<float> { 1500000f, 3000000f, 1500000f };
+                ViewBag.Total = 1500000f + 3000000f + 1500000f;
             }
 
             //////////////////////////
-            if (startTime1 != null || endTime1 != null) 
+            if (startTime1 != DateTime.MinValue || endTime1 != DateTime.MinValue) 
             {
                 List<string> listKeyName = new List<string>();
                 List<int> listValueNumber = new List<int>();
@@ -51,6 +49,9 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
                 }
                 ViewBag.ListKeyName = listKeyName;
                 ViewBag.ListValueNumber = listValueNumber;
+                ViewBag.ListValueNumber1 =new List<int> { 10, 20, 10 };
+
+
             }
         
             return View();
