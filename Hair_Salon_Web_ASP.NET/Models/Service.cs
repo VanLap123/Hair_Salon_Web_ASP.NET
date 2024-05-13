@@ -17,7 +17,7 @@ namespace Hair_Salon_Web_ASP.NET.Models
         public string? ser_image { get; set; }
         [NotMapped]
         public IFormFile? ImageFile { get; set; }
-        public string description { get; set; }
+        public string? description { get; set; }
         public virtual ICollection<Appointment>? appointment { get; set; }
 
     }

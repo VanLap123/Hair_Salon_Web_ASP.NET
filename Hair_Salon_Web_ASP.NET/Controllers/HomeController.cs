@@ -38,8 +38,10 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
                         ViewBag.SearchMessage = "the post is not found";
                     }
                 }
+
+            lstPost =lstPost.Reverse();
                        
-            return View(lstPost);
+            return View(lstPost.ToList());
           
         }
 

@@ -22,7 +22,7 @@ namespace Hair_Salon_Web_ASP.NET.Models
                     new User
                     {
                         phone_number = "0901278074",
-                        password = BCrypt.Net.BCrypt.HashPassword("1", 12),
+                        password = BCrypt.Net.BCrypt.HashPassword("12345678", 12),
                        
                         role = "Admin",
                         name = "Nguyen Van Lap",
@@ -33,7 +33,7 @@ namespace Hair_Salon_Web_ASP.NET.Models
                     new User
                     {
                         phone_number = "0901278075",
-                        password = BCrypt.Net.BCrypt.HashPassword("1", 12),
+                        password = BCrypt.Net.BCrypt.HashPassword("12345678", 12),
                        
                         role = "Employee",
                         name = "Ho Kien Vinh",
@@ -44,7 +44,7 @@ namespace Hair_Salon_Web_ASP.NET.Models
                      new User
                      {
                          phone_number = "0901278076",
-                         password = BCrypt.Net.BCrypt.HashPassword("1", 12),
+                         password = BCrypt.Net.BCrypt.HashPassword("12345678", 12),
                          
                          role = "Employee",
                          name = "Nguyen Ngoc Duy Chuong",
@@ -55,7 +55,7 @@ namespace Hair_Salon_Web_ASP.NET.Models
                       new User
                       {
                           phone_number = "0901278077",
-                          password = BCrypt.Net.BCrypt.HashPassword("1", 12),
+                          password = BCrypt.Net.BCrypt.HashPassword("12345678", 12),
                           role = "Employee",
                      
                           name = "Nguyen Nhat Khang",
@@ -66,7 +66,7 @@ namespace Hair_Salon_Web_ASP.NET.Models
                     new User
                     {
                         phone_number = "0901278078",
-                        password = BCrypt.Net.BCrypt.HashPassword("1", 12),
+                        password = BCrypt.Net.BCrypt.HashPassword("12345678", 12),
                         role = "Client",
                        
                         name = "Nguyen Phi Hung",

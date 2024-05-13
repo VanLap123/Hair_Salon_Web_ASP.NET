@@ -34,32 +34,36 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
         [HttpPost]
         public IActionResult Create(User user)
         {
-            
+            ViewBag.role = HttpContext.Session.GetString("role");
+            ViewBag.phone_number = HttpContext.Session.GetString("phone_number");
+            User obj = _db.Users.SingleOrDefault(u => u.phone_number == user.phone_number);
+            if (string.IsNullOrEmpty(user.name))
+            {
+                ModelState.AddModelError("name", "Name is required");
+            }
+
+            if (string.IsNullOrEmpty(user.address))
+            {
+                ModelState.AddModelError("address", "Address is required");
+            }
+
+            if (obj != null)
+            {
+                ModelState.AddModelError("phone_number", "Phone number was Registered");
+
+            }
+            if (user.password != user.ConfirmPassword)
+            {
+
+                ModelState.AddModelError("ConfirmPassword", "Password and Confirm Password is not match");
+            }
+
             if (ModelState.IsValid)
             {
-                User obj = _db.Users.SingleOrDefault(u => u.phone_number == user.phone_number);
-
-                if (obj != null)
-                {
-                  
-                    ModelState.AddModelError("phone_number", "Phone number was Registered");
-                }
-                else
-                {
-                    if (user.password != user.ConfirmPassword)
-                    {
-                        ModelState.AddModelError("ConfirmPassword", "Passwords must match.");
-                        return View(user);
-                    }
-                    else
-                    {
+               
                         _repo.CreateUser(user);
                         return RedirectToAction("Index");
-                    }
-                 
-                }
-               
-                
+
             }
             return View(user);
         }
@@ -79,7 +83,26 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
         [HttpPost]
         public IActionResult Edit(int user_id,User user)
         {
-          
+
+            ViewBag.role = HttpContext.Session.GetString("role");
+            ViewBag.phone_number = HttpContext.Session.GetString("phone_number");
+
+            User obj = _db.Users.SingleOrDefault(u => u.phone_number == user.phone_number);
+            if (string.IsNullOrEmpty(user.name))
+            {
+                ModelState.AddModelError("name", "Name is required");
+            }
+
+            if (string.IsNullOrEmpty(user.address))
+            {
+                ModelState.AddModelError("address", "Address is required");
+            }
+
+           /* if (obj != null)
+            {
+                ModelState.AddModelError("phone_number", "Phone number was Registered");
+
+            }*/
 
             if (ModelState.IsValid)
             {

@@ -15,50 +15,52 @@
 <a asp-action="ShowBookingHistory" asp-controller="Appointment">
     <button type="button" class="btn btn-outline-primary">Haircut History</button>
 </a>
-
-<table class="table table-bordered" style="margin-bottom:450px">
-    <thead>
-        <tr>
-            <th scope="col">
-                Date
-            </th>
-            <th scope="col">
-                Booking Time
-            </th>
-            <th scope="col">
-                Employee Name
-            </th>
-            <th scope="col">
-                Service Name
-            </th>
-            <th scope="col">Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if(Model !=null)
-        {
-            @foreach (var item in Model)
+<div>
+    <table class="table table-bordered" style="margin-bottom:450px">
+        <thead>
+            <tr>
+                <th scope="col">
+                    Date
+                </th>
+                <th scope="col">
+                    Booking Time
+                </th>
+                <th scope="col">
+                    Employee Name
+                </th>
+                <th scope="col">
+                    Service Name
+                </th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
             {
-                <tr>
-                    <td>
-                        @item.Date
-                    </td>
-                    <td>
-                        @item.BookingTime
-                    </td>
-                    <td>
-                        @item.EmployeeName
-                    </td>
-                    <td>
-                        @item.ServiceName
-                    </td>
-                    <td>
-                        <a asp-action="CanceledByClient" asp-route-app_id="@item.app_id" onclick="return confirm('Do you want to cancle this appointment?')">Cancel</a>
-                    </td>
-                    
-                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @item.Date
+                        </td>
+                        <td>
+                            @item.BookingTime
+                        </td>
+                        <td>
+                            @item.EmployeeName
+                        </td>
+                        <td>
+                            @item.ServiceName
+                        </td>
+                        <td>
+                            <a asp-action="CanceledByClient" asp-route-app_id="@item.app_id" onclick="return confirm('Do you want to cancle this appointment?')">Cancel</a>
+                        </td>
+
+                    </tr>
+                }
             }
-        }
-        
-    </tbody>
-</table>
+
+        </tbody>
+    </table>
+
+</div>

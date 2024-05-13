@@ -21,32 +21,34 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
         [HttpPost]
         public IActionResult Create(User user)
         {
+            User obj = _db.Users.SingleOrDefault(u => u.phone_number == user.phone_number);
+            if (string.IsNullOrEmpty(user.name))
+            {
+                ModelState.AddModelError("name", "Name is required");
+            }
+
+            if (string.IsNullOrEmpty(user.address))
+            {
+                ModelState.AddModelError("address", "Address is required");
+            }
             
+            if (obj != null)
+            {
+              ModelState.AddModelError("phone_number", "Phone number was Registered");
+
+            }
+            if (user.password != user.ConfirmPassword)
+            {
+
+                ModelState.AddModelError("ConfirmPassword", "Password and Confirm Password is not match");
+            }
+          
             user.role = "Client";
             if (ModelState.IsValid)
-            {
-                User obj = _db.Users.SingleOrDefault(u => u.phone_number == user.phone_number);
-                if (obj == null)
-                {
-                    if (user.password == user.ConfirmPassword)
-                    {
-                        
+            {        
                         _repo.CreateUser(user);
                         return RedirectToAction("Index", "Login");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("ConfirmPassword", "Password and Confirm Password is not match");
-                        return View(user);
-                    }
 
-                }
-                else
-                {
-                   
-                    ModelState.AddModelError("phone_number", "Phone number was Registered");
-                }
-               
             }
             return View(user);
             

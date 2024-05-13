@@ -258,9 +258,11 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
         }
         [UserRole(UserRole.Client)]
         public IActionResult CanceledByClient(int app_id)
-        {
+        {  ViewBag.role = HttpContext.Session.GetString("role");
+            ViewBag.phone_number = HttpContext.Session.GetString("phone_number");
+            int user_id = HttpContext.Session.GetInt32("user_id") ?? 0;
             _repo.UpdateAppointmentStatus(app_id, "Canceled");
-            return View("ShowAppointmentCurrent");
+            return RedirectToAction("ShowAppointmentCurrent");
         }
         [UserRole(UserRole.Admin, UserRole.Employee)]
         [HttpGet]
@@ -399,6 +401,16 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
             ViewData["emp_list"] = emp_list;
             ViewData["ser_id"] = new SelectList(_db.Services, "ser_id", "ser_id", appointment.ser_id);
             ViewData["emp_id_chosen"] = new SelectList(_repo.GetEmployee(), "user_id", "emp_id_chosen", appointment.emp_id_chosen);
+            User user = _repo.GetUserByPhoneNumber(phoneNumber);
+            if (string.IsNullOrEmpty(phoneNumber))
+                {
+                    ModelState.AddModelError("", "Customer Phone Number is required");
+             }
+            
+            else if(user ==null)
+            {
+                ModelState.AddModelError("", "Phone Number is not true or not registered");
+            }
 
             if (appointment.emp_id_chosen == 1)
             {
@@ -410,7 +422,7 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
             {
                 Service found_service = _db.Services.SingleOrDefault(s => s.ser_id == appointment.ser_id);
 
-                User user = _repo.GetUserByPhoneNumber(phoneNumber);
+               
                 appointment.user_id_book = user.user_id;
 
                 if (TimeOnly.TryParse(appointment.booking_time, out TimeOnly newTimeOnly))

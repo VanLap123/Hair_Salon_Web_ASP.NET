@@ -34,6 +34,10 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
         [HttpPost]
         public IActionResult Create(Service service)
         {
+            if (service.ImageFile == null)
+            {
+                ModelState.AddModelError("ImageFile", "The image is required");
+            }
             if (ModelState.IsValid)
             {
                 var image = _fileService.SaveImage(service.ImageFile);
@@ -102,7 +106,7 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
                 }
             }
 
-            // Redirect sau khi cập nhật thành công
+            // Redirect 
             return RedirectToAction(nameof(Index));
         }
 

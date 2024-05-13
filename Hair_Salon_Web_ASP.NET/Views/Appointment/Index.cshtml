@@ -89,8 +89,8 @@
                         @item.ServiceName
                     </td>
                     <td>
-                       
-                        <a asp-action="Refuse" asp-route-app_id="@item.app_id" style="text-decoration:none">
+
+                        <a asp-action="Refuse" asp-route-app_id="@item.app_id" style="text-decoration:none" onclick="return confirm('Do you want to cancel this appointment?')">
                             <img style="width:40px;height:40px" src="~/images/rejected.png" alt="" />
                         </a>
                     </td>

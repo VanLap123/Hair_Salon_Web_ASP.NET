@@ -37,6 +37,10 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
         [HttpPost]
         public IActionResult Create(Post post)
         {
+            if (post.ImageFile == null)
+            {
+                ModelState.AddModelError("post_image", "The image is required");
+            }
             if (ModelState.IsValid)
             {
                 post.date = DateTime.Now;
@@ -77,17 +81,29 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
             {
                 try
                 {
-                    if (post.ImageFile != null)
+                    Post oldPost = _db.Posts.Find(post_id);
+                    if (post.ImageFile == null)
+                    {
+                      oldPost.title=post.title;
+                      oldPost.description=post.description;
+                      oldPost.date=post.date;
+                    }
+                    else
                     {
                         var result = _fileService.SaveImage(post.ImageFile);
                         if (result.Item1 == 1)
                         {
-                            var oldImage = post.post_image;
-                            post.post_image = result.Item2;
+                            var oldImage = oldPost.post_image;
+                            oldPost.post_image = result.Item2;
                             _fileService.DeleteImage(oldImage);
+                            oldPost.title = post.title;
+                            oldPost.description = post.description;
+                            oldPost.date = post.date;
+
                         }
+
                     }
-                    _db.Update(post);
+                    _db.Update(oldPost);
                     _db.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
