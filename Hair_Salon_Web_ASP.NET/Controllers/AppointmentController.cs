@@ -34,7 +34,7 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
                 
                 if (user!=null)
                 {
-                    List<Appointment> appointments1 = _db.Appointments.Where(s => s.user_id_book == user.user_id).ToList();
+                    List<AppointmentUserInfo> appointments1 = _repo.GetAppointmentUserInfoList().Where(s => s.UserIDBooked == user.user_id).ToList();
                     if (appointments1.Count() != 0)
                     {
                         return View(appointments1);
@@ -53,7 +53,7 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
             if(date!=null)
             {
                 DateTime dateChosen =DateTime.Parse(date);
-                List<Appointment> appointments2 = _db.Appointments.Where(s => s.date == dateChosen).ToList();
+                List<AppointmentUserInfo> appointments2 = _repo.GetAppointmentUserInfoList().Where(s => s.Date == dateChosen).ToList();
                 if(appointments2.Count() != 0)
                 {
                     return View(appointments2);

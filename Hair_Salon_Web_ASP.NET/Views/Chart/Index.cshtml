@@ -23,15 +23,15 @@
                     </div>
                 </div>
                 <h5 class="text-black ms-3">Total Revenue Of Salon: @ViewBag.Total million VND</h5>
-                <canvas id="myChart12" style="width:100%;max-width:600px"></canvas>
+                <canvas id="myChart1" style="width:100%;max-width:600px"></canvas>
 
                 <script>
                    
-                    var xValues = ["Ho Kien Vinh", "Nguyen Ngoc Duy Chuong", "Nguyen Nhat Khang"];
+                    var xValues = JSON.parse('@Html.Raw(Json.Serialize(ViewBag.ListKey))');
                     var yValues = JSON.parse('@Html.Raw(Json.Serialize(ViewBag.ListValue))');
-                    var barColors = ["red", "green", "blue"];
+                    var barColors = ["red"];
 
-                    new Chart("myChart12", {
+                    new Chart("myChart1", {
                         type: "bar",
                         data: {
                             labels: xValues,
@@ -45,12 +45,20 @@
                             title: {
                                 display: true,
                                 text: "The total amount of money each employee brings to the Salon"
+                            },
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
                             }
                         }
                     });
                 </script>
             </div>
         </div>
+
         <div class="col">
             <div class="card">
                 <div class="row">
@@ -68,14 +76,14 @@
 
                     </div>
                 </div>
-                <canvas id="myChart2" style="width:100%;max-width:600px"></canvas>
+                <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
 
                 <script>
-                    var xValues = ["Ho Kien Vinh", "Nguyen Ngoc Duy Chuong", "Nguyen Nhat Khang"];
-                    var yValues = [5, 14, 3];
+                    var xValues = JSON.parse('@Html.Raw(Json.Serialize(ViewBag.ListKeyName))');
+                    var yValues = JSON.parse('@Html.Raw(Json.Serialize(ViewBag.ListValueNumber))');
                     var barColors = ["red", "green", "blue", "orange", "brown"];
 
-                    new Chart("myChart2", {
+                    new Chart("myChart", {
                         type: "bar",
                         data: {
                             labels: xValues,
@@ -89,6 +97,13 @@
                             title: {
                                 display: true,
                                 text: "Trend of customers choosing Hairdresser"
+                            },
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
                             }
                         }
                     });

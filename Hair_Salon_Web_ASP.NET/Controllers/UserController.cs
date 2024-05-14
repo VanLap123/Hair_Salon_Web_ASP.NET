@@ -21,7 +21,7 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
         {
             ViewBag.role = HttpContext.Session.GetString("role");
             ViewBag.phone_number = HttpContext.Session.GetString("phone_number");
-            List<User> users = await _db.Users.ToListAsync();
+            List<User> users = await _db.Users.Where(u=>u.role == "Client" || u.role == "Employee").ToListAsync();
             return View(users);
         }
 
@@ -59,11 +59,9 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
             }
 
             if (ModelState.IsValid)
-            {
-               
+            {              
                         _repo.CreateUser(user);
                         return RedirectToAction("Index");
-
             }
             return View(user);
         }

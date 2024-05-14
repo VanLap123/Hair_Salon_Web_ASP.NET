@@ -23,17 +23,15 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
                 Dictionary<string, float> listPriceEmployee = _repo.GetEmployeeWithNumberAppointment(startTime, endTime);
                 List<string> listKey = new List<string>();
                 List<float> listValue = new List<float>();
-                Dictionary<string, float> listKeyAndHours = new Dictionary<string, float>();
-               
-                foreach (var item in listKeyAndHours)
+                foreach (var item in listPriceEmployee)
                 {
                     listKey.Add(item.Key);
                     listValue.Add(item.Value);
                 }
                 ViewBag.ListKey = listKey;
                 ViewBag.ListValue = listValue;
-                ViewBag.ListValue = new List<float> { 1500000f, 3000000f, 1500000f };
-                ViewBag.Total = 1500000f + 3000000f + 1500000f;
+                float total = listValue.Sum();
+                ViewBag.Total = total;
             }
 
             //////////////////////////
@@ -49,9 +47,6 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
                 }
                 ViewBag.ListKeyName = listKeyName;
                 ViewBag.ListValueNumber = listValueNumber;
-                ViewBag.ListValueNumber1 =new List<int> { 10, 20, 10 };
-
-
             }
         
             return View();
