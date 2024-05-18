@@ -334,12 +334,16 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
             ViewData["ser_id"] = new SelectList(_db.Services, "ser_id", "name");
             ViewData["emp_list"] = _repo.GetEmployee();
             Appointment current_app = _repo.FindById(app_id);
-           
 
+            if (current_app == null)
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
             if (app_id != appointment.app_id)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
+
             if (appointment.emp_id_chosen == 1)
             {
                 int empId = _repo.GetEmployeeIfRandom(appointment.date);
@@ -349,7 +353,7 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
             if (ModelState.IsValid)
             {
                 Service found_service = _db.Services.SingleOrDefault(s => s.ser_id == appointment.ser_id);
-                appointment.user_id_book = HttpContext.Session.GetInt32("user_id");
+                appointment.user_id_book = current_app.user_id_book;
 
                 if (TimeOnly.TryParse(appointment.booking_time, out TimeOnly newTimeOnly))
                 {
