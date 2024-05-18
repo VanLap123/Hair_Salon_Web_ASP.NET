@@ -42,7 +42,30 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
         [HttpPost]
         public IActionResult Edit(int user_id, User user)
         {
+            ViewBag.role = HttpContext.Session.GetString("role");
+            ViewBag.phone_number = HttpContext.Session.GetString("phone_number");
             string phone_number = HttpContext.Session.GetString("phone_number");
+            if (user.phone_number != phone_number)
+            {
+                User obj = _db.Users.SingleOrDefault(u => u.phone_number == user.phone_number);
+
+                if (obj != null)
+                {
+                    ModelState.AddModelError("phone_number", "Phone number was Registered");
+
+                }
+            }
+            
+            if (string.IsNullOrEmpty(user.name))
+            {
+                ModelState.AddModelError("name", "Name is required");
+            }
+
+            if (string.IsNullOrEmpty(user.address))
+            {
+                ModelState.AddModelError("address", "Address is required");
+            }
+
             if (ModelState.IsValid)
             {
                 if (phone_number!=user.phone_number)

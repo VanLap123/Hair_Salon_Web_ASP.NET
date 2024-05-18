@@ -57,6 +57,12 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
 
                 ModelState.AddModelError("ConfirmPassword", "Password and Confirm Password is not match");
             }
+            if (user.password.Length < 8)
+            {
+
+                ModelState.AddModelError("password", "Password must be at least 8 characters ");
+            }
+
 
             if (ModelState.IsValid)
             {              
@@ -86,6 +92,8 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
             ViewBag.phone_number = HttpContext.Session.GetString("phone_number");
 
             User obj = _db.Users.SingleOrDefault(u => u.phone_number == user.phone_number);
+            User old_obj = _db.Users.SingleOrDefault(u => u.user_id == user.user_id);
+            string phone_number = HttpContext.Session.GetString("phone_number");
             if (string.IsNullOrEmpty(user.name))
             {
                 ModelState.AddModelError("name", "Name is required");
@@ -95,20 +103,40 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
             {
                 ModelState.AddModelError("address", "Address is required");
             }
-
-           /* if (obj != null)
+            if (obj.phone_number != old_obj.phone_number)
             {
-                ModelState.AddModelError("phone_number", "Phone number was Registered");
+                if (obj != null)
+                {
+                    ModelState.AddModelError("phone_number", "Phone number was Registered");
 
-            }*/
+                }
+            }
 
+            if (user.password.Length < 8)
+            {
+
+                ModelState.AddModelError("password", "Password must be at least 8 characters ");
+            }
             if (ModelState.IsValid)
             {
-                int costParameter = 12;
-                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.password, costParameter);
-                user.password = hashedPassword;
-                user.user_id = user_id;
-                _db.Users.Update(user);
+                if(user.password != old_obj.password)
+                {
+                    int costParameter = 12;
+                    string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.password, costParameter);
+                    old_obj.password = hashedPassword;
+                }
+                else
+                {
+                    old_obj.password=user.password.ToString();
+                }
+                old_obj.name= user.name;
+                old_obj.role = user.role;
+                old_obj.gender = user.gender;
+                old_obj.address= user.address;
+                old_obj.phone_number= user.phone_number;
+                old_obj.about_user= user.about_user;
+
+                _db.Users.Update(old_obj);
                  _db.SaveChanges();
                 return RedirectToAction("Index");
             }

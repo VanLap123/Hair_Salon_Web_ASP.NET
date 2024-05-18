@@ -10,6 +10,11 @@ namespace Hair_Salon_Web_ASP.NET.Repository
         {
             _db = db;
         }
+
+        public Appointment FindById(int app_id)
+        {
+            return _db.Appointments.Where(app => app.app_id == app_id).FirstOrDefault();
+        }
         public Dictionary<string,float> GetEmployeeWithNumberAppointment(DateTime startTime, DateTime endTime)
         {
             Dictionary<string, float> lstEmployee = new Dictionary<string, float>();
@@ -188,6 +193,7 @@ namespace Hair_Salon_Web_ASP.NET.Repository
 
             foreach (var existingAppointment in list_appointments)
             {
+                //int exist_book = TimeOnly.Parse(existingAppointment.booking_time);
                 if (booking_time >= TimeOnly.Parse(existingAppointment.booking_time) && booking_time <TimeOnly.Parse(existingAppointment.finish_time) || finish_time > TimeOnly.Parse(existingAppointment.booking_time) && finish_time < TimeOnly.Parse(existingAppointment.finish_time) || finish_time== TimeOnly.Parse(existingAppointment.finish_time))
                 {
                     return false;
@@ -202,28 +208,26 @@ namespace Hair_Salon_Web_ASP.NET.Repository
         public List<string> GetListOfTimeBooked(DateTime time,int id_imployee)
         {
             List<string> list_time_booked = new List<string>();
-           /*if(time.Date == DateTime.Now.Date)
-            {
-
-				DateTime now = DateTime.Now;
-
-				DateTime startTime = new DateTime(now.Year, now.Month, now.Day, 8, 0, 0);
-
-				list_time_booked.Add(startTime.ToString("HH:mm"));
-
-				while (startTime < now)
-				{
-
-					startTime = startTime.AddMinutes(30);
-
-					list_time_booked.Add(startTime.ToString("HH:mm"));
-				}
-			}*/
+       
             if (time.Date>=DateTime.Now.Date)
             {
+                if (time.Date == DateTime.Now.Date)
+                {
 
-                
-                    List<Appointment> list = _db.Appointments.Where(a => a.date == time && a.status == "Booking successfully" && a.emp_id_chosen == id_imployee).ToList();
+                    DateTime now = DateTime.Now;
+
+                    DateTime startTime = new DateTime(now.Year, now.Month, now.Day, 8, 0, 0);
+
+                    list_time_booked.Add(startTime.ToString("HH:mm"));
+
+                    while (startTime < now.AddMinutes(-30))
+                    {
+                        startTime = startTime.AddMinutes(30);
+
+                        list_time_booked.Add(startTime.ToString("HH:mm"));
+                    }
+                }
+                List<Appointment> list = _db.Appointments.Where(a => a.date == time && a.status == "Booking successfully" && a.emp_id_chosen == id_imployee).ToList();
 
                     foreach (var appointment in list)
                     {

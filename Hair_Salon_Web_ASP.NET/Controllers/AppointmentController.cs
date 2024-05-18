@@ -115,32 +115,35 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
             string role = HttpContext.Session.GetString("role");
             ViewBag.role = HttpContext.Session.GetString("role");
             ViewBag.phone_number = HttpContext.Session.GetString("phone_number");
+            ViewData["ser_id"] = new SelectList(_db.Services, "ser_id", "name");
+
+            List<User> emp_list = _repo.GetEmployee();
+            ViewData["emp_list"] = emp_list;
             Service service = new Service();
             Appointment appointment = new Appointment();
-            if (ser_id != null)
+            if (ser_id != 0)
             {
                 //when customer choose service in services page
                 service = _db.Services.Where(s=>s.ser_id == ser_id).FirstOrDefault();
                 
                 appointment.ser_id = ser_id;
-                appointment.date= DateTime.Now.Date;
+                
             }
-           
+            appointment.date = DateTime.Now.Date;
             if (role ==null)   
             {
                 TempData["LoginMessage"] = "You need to log in to book a haircut or create a new account.";
                 return RedirectToAction("Index", "Login");
             }
-                ViewData["ser_id"] = new SelectList(_db.Services, "ser_id", "name");
-
-                List<User> emp_list = _repo.GetEmployee();
-                ViewData["emp_list"] = emp_list;
+               
                 return View(appointment);
         }
         
         [HttpPost]
         public IActionResult Create(Appointment appointment)
         {
+            ViewBag.role = HttpContext.Session.GetString("role");
+            ViewBag.phone_number = HttpContext.Session.GetString("phone_number");
             List<User> emp_list = _repo.GetEmployee();
             ViewData["emp_list"] = emp_list;
 			ViewData["ser_id"] = new SelectList(_db.Services, "ser_id", "ser_id", appointment.ser_id);
@@ -184,14 +187,14 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
                     }
                     else
                     {
-                       
-                        ModelState.AddModelError(string.Empty, "The service you choose not enough time, please choose another:");
+                        ViewData["ser_id"] = new SelectList(_db.Services, "ser_id", "name");
+                        ModelState.AddModelError(string.Empty, "The service you choose not enough to do, please choose another time or service:");
                         return View("Create");
                     }
                 }
                 else
                 {
-
+                    ViewData["ser_id"] = new SelectList(_db.Services, "ser_id", "name");
                     ModelState.AddModelError("date", "You can not choose the date in the past");
                     return View("Create");
                 }
@@ -210,12 +213,12 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
             int user_id = HttpContext.Session.GetInt32("user_id") ?? 0;
             DateTime now = DateTime.Now;
             DateTime currentDate = new DateTime(now.Year, now.Month, now.Day, 00, 00, 00);
-            List<AppointmentUserInfo> appointments = _repo.GetAppointmentUserInfoList().Where(e => e.EmployeeIDChosen == user_id && e.Date==currentDate && e.Status == "Booking successfully").ToList();
+            List<AppointmentUserInfo> appointments = _repo.GetAppointmentUserInfoList().Where(e => e.EmployeeIDChosen == user_id && e.Date==currentDate).ToList();
              //Filter herel
             if (date_show_task != null)
             {
                 DateTime dateChosen = DateTime.Parse(date_show_task);
-                List<AppointmentUserInfo> appointments2 = _repo.GetAppointmentUserInfoList().Where(e => e.EmployeeIDChosen == user_id && e.Date ==dateChosen && e.Status == "Booking successfully").ToList();
+                List<AppointmentUserInfo> appointments2 = _repo.GetAppointmentUserInfoList().Where(e => e.EmployeeIDChosen == user_id && e.Date ==dateChosen).ToList();
                 if (appointments2.Count() != 0)
                 {
                     return View(appointments2);
@@ -258,7 +261,8 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
         }
         [UserRole(UserRole.Client)]
         public IActionResult CanceledByClient(int app_id)
-        {  ViewBag.role = HttpContext.Session.GetString("role");
+        {  
+            ViewBag.role = HttpContext.Session.GetString("role");
             ViewBag.phone_number = HttpContext.Session.GetString("phone_number");
             int user_id = HttpContext.Session.GetInt32("user_id") ?? 0;
             _repo.UpdateAppointmentStatus(app_id, "Canceled");
@@ -268,6 +272,8 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
         [HttpGet]
         public IActionResult Accept(int app_id)
         {
+            ViewBag.role = HttpContext.Session.GetString("role");
+            ViewBag.phone_number = HttpContext.Session.GetString("phone_number");
             _repo.UpdateAppointmentStatus(app_id, "Booking successfully");
             return RedirectToAction("Index");
         }
@@ -275,6 +281,8 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
         [HttpGet]
         public IActionResult Refuse(int app_id)
         {
+            ViewBag.role = HttpContext.Session.GetString("role");
+            ViewBag.phone_number = HttpContext.Session.GetString("phone_number");
             _repo.UpdateAppointmentStatus(app_id, "Canceled");
             if (HttpContext.Session.GetString("role") == "Employee")
             {
@@ -287,7 +295,15 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
         [HttpGet]
         public IActionResult Done(int app_id)
         {
+            ViewBag.role = HttpContext.Session.GetString("role");
+            string role = HttpContext.Session.GetString("role");
+            ViewBag.phone_number = HttpContext.Session.GetString("phone_number");
             _repo.UpdateAppointmentStatus(app_id, "Finished");
+            if(role == "Employee")
+            {
+                return RedirectToAction("ShowTaskEmployee", "Appointment");
+            }
+
             return RedirectToAction("Index");
         }
         [UserRole(UserRole.Admin, UserRole.Employee)]
@@ -300,13 +316,13 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
 
             if (app_id == null || _db.Appointments == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound","Error");
             }
 
             Appointment appointment = _db.Appointments.Find(app_id);
             if (appointment == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
 
             return View(appointment);
@@ -317,6 +333,8 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
         {
             ViewData["ser_id"] = new SelectList(_db.Services, "ser_id", "name");
             ViewData["emp_list"] = _repo.GetEmployee();
+            Appointment current_app = _repo.FindById(app_id);
+           
 
             if (app_id != appointment.app_id)
             {
@@ -344,8 +362,14 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
                     List<Appointment> appointments = _repo.GetAppointmentsByEmp_IdAndDate(appointment.date, appointment.emp_id_chosen);
                     if (_repo.IsAppointmentValid(appointments, newTimeOnly, newTimeOnly.AddMinutes(found_service.time_to_cut)) == true)
                     {
-                        appointment.status = "Booking successfully";
-                        _db.Update(appointment);
+                        current_app.emp_id_chosen = appointment.emp_id_chosen;
+                        current_app.finish_time = appointment.finish_time;
+                        current_app.booking_time = appointment.booking_time;
+                        current_app.user_id_book = appointment.user_id_book;
+                        current_app.ser_id = appointment.ser_id;
+
+                        current_app.status = "Booking successfully";
+                        _db.Update(current_app);
                         _db.SaveChanges();
                         return RedirectToAction(nameof(Index));
                     }

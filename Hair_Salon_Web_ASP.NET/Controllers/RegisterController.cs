@@ -42,7 +42,12 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
 
                 ModelState.AddModelError("ConfirmPassword", "Password and Confirm Password is not match");
             }
-          
+            if (user.password.Length <8)
+            {
+
+                ModelState.AddModelError("password", "Password must be at least 8 characters ");
+            }
+
             user.role = "Client";
             if (ModelState.IsValid)
             {        
