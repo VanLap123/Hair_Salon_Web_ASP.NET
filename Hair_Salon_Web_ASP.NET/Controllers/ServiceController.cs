@@ -65,6 +65,8 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
         [HttpPost]
         public IActionResult Edit(int ser_id, Service service)
         {
+            ViewBag.role = HttpContext.Session.GetString("role");
+            ViewBag.phone_number = HttpContext.Session.GetString("phone_number");
             try
             {
                 Service oldService = _db.Services.Find(ser_id);

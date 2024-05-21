@@ -90,16 +90,15 @@
 <script>
     document.getElementById("serviceDropdown").addEventListener("change", checkSelections);
     document.getElementById("hairdresserDropdown").addEventListener("change", checkSelections);
-    document.getElementById("dateInput").addEventListener("change", checkSelections);
-
+  
     function checkSelections() {
         var serviceSelected = document.getElementById("serviceDropdown").value !== "";
         var hairdresserSelected = document.getElementById("hairdresserDropdown").value !== "";
-        var dateSelected = document.getElementById("dateInput").value !== "";
+     
 
         var timeDropdown = document.getElementById("timeDropdown");
 
-        if (serviceSelected && hairdresserSelected && dateSelected) {
+        if (serviceSelected && hairdresserSelected) {
             timeDropdown.disabled = false;
             get(document.getElementById("dateInput").value, document.getElementById("hairdresserDropdown").value);
         } else {
@@ -107,11 +106,31 @@
         }
     }
 
+        // catch the event
+            document.getElementById("dateInput").addEventListener("change", function () {
+            // take the date chosen
+            var selectedDate = this.value;
+        var empIdChosen = document.getElementById("hairdresserDropdown").value;
+            // call GetBookedTimes in controller by using AJAX
+            get(selectedDate, empIdChosen)
+
+        });
+
+    document.getElementById("hairdresserDropdown").addEventListener("change", function () {
+            // take the date chosen
+            var empIdChosen = this.value;
+        var selectedDate = document.getElementById("dateInput").value;
+             // call GetBookedTimes in controller by using AJAX
+            get(selectedDate, empIdChosen)
+
+        });
+
+
     function get(selectedDate, empIdChosen) {
         fetch('/Appointment/GetBookedTimes?selectedDate=' + selectedDate + '&empIdChosen=' + empIdChosen)
             .then(response => response.json())
             .then(bookedTimes => {
-                // Đánh dấu các thời gian đã được đặt như là disabled trong dropdown
+                // mark the time booked is disabled in dropdown
                 var timeDropdown = document.getElementById("timeDropdown");
                 var options = timeDropdown.options;
 

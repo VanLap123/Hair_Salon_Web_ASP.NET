@@ -72,6 +72,8 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
         [HttpPost]
         public IActionResult Edit(int post_id, Post post) 
         {
+            ViewBag.role = HttpContext.Session.GetString("role");
+            ViewBag.phone_number = HttpContext.Session.GetString("phone_number");
             if (post_id != post.post_id)
             {
                 return NotFound();

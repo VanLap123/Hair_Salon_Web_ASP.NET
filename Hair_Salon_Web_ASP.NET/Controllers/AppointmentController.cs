@@ -331,6 +331,8 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
         [HttpPost]
         public IActionResult Edit(int app_id, Appointment appointment)
         {
+            ViewBag.role = HttpContext.Session.GetString("role");
+            ViewBag.phone_number = HttpContext.Session.GetString("phone_number");
             ViewData["ser_id"] = new SelectList(_db.Services, "ser_id", "name");
             ViewData["emp_list"] = _repo.GetEmployee();
             Appointment current_app = _repo.FindById(app_id);
@@ -425,6 +427,8 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
         [HttpPost]
         public IActionResult CreateAppointment(Appointment appointment, string phoneNumber)
         {
+            ViewBag.role = HttpContext.Session.GetString("role");
+            ViewBag.phone_number = HttpContext.Session.GetString("phone_number");
             List<User> emp_list = _repo.GetEmployee();
             ViewData["emp_list"] = emp_list;
             ViewData["ser_id"] = new SelectList(_db.Services, "ser_id", "ser_id", appointment.ser_id);
@@ -481,20 +485,21 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
                     }
                     else
                     {
-
-                        ModelState.AddModelError(string.Empty, "The service you choose not enough time, please choose another:");
+                        ViewData["ser_id"] = new SelectList(_db.Services, "ser_id", "name");
+                        ModelState.AddModelError(string.Empty, "The service you choose not enough time to do, please choose another:");
                         return View("Create");
                     }
                 }
                 else
                 {
-
+                    ViewData["ser_id"] = new SelectList(_db.Services, "ser_id", "name");
                     ModelState.AddModelError("date", "You can not choose the date in the past");
                     return View("Create");
                 }
 
             }
-
+            ViewData["ser_id"] = new SelectList(_db.Services, "ser_id", "name");
+            ViewData["ser_id"] = new SelectList(_db.Services, "ser_id", "name");
             return View(appointment);
         }
         [UserRole(UserRole.Admin, UserRole.Employee)]

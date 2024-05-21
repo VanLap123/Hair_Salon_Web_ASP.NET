@@ -16,7 +16,7 @@
             </div>
             <div data-mdb-input-init class="form-outline mb-4">
                 <label class="control-label lable">Choose Service(*):</label>
-                <select asp-for="ser_id" class="form-control" asp-items="ViewBag.ser_id">
+                <select asp-for="ser_id" class="form-control" asp-items="ViewBag.ser_id" id="serviceDropdown">
                     <option value="">Select Service</option>
                 </select>
                 <span asp-validation-for="ser_id" class="text-danger"></span>
@@ -25,7 +25,7 @@
 
             <div data-mdb-input-init class="form-outline mb-4">
                 <label class="control-label lable">Choose Hairdresser(*):</label>
-                <select asp-for="emp_id_chosen" class="form-control">
+                <select asp-for="emp_id_chosen" class="form-control" id="hairdresserDropdown">
                     <option value="" selected>Select Hairdresser</option>
                     <option value="1">Chosen By Shop</option>
                     @{
@@ -41,13 +41,13 @@
 
             <div data-mdb-input-init class="form-outline mb-4">
                 <label class="control-label lable">Choose Date(*):</label>
-                <input type="date" asp-for="date" class="form-control" />
+                <input type="date" asp-for="date" class="form-control" id="dateInput" />
                 <span asp-validation-for="date" class="text-danger"></span>
             </div>
 
             <div data-mdb-input-init class="form-outline mb-4">
                 <label class="control-label lable">Choose Time(*):</label>
-                <select asp-for="booking_time" class="form-control" id="timeDropdown">
+                <select asp-for="booking_time" class="form-control" id="timeDropdown" disabled>
                     <option value="">Select Time</option>
                     @{
                         List<string> availableTimes = new List<string> { "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00" };
@@ -68,30 +68,49 @@
     </div>
 </div>
 <script>
-    // Bắt sự kiện khi người dùng thay đổi ngày
-    document.getElementById("date").addEventListener("change", function () {
-        // Lấy ngày được chọn
+    document.getElementById("serviceDropdown").addEventListener("change", checkSelections);
+    document.getElementById("hairdresserDropdown").addEventListener("change", checkSelections);
+
+    function checkSelections() {
+        var serviceSelected = document.getElementById("serviceDropdown").value !== "";
+        var hairdresserSelected = document.getElementById("hairdresserDropdown").value !== "";
+
+
+        var timeDropdown = document.getElementById("timeDropdown");
+
+        if (serviceSelected && hairdresserSelected) {
+            timeDropdown.disabled = false;
+            get(document.getElementById("dateInput").value, document.getElementById("hairdresserDropdown").value);
+        } else {
+            timeDropdown.disabled = true;
+        }
+    }
+
+    // catch the event
+    document.getElementById("dateInput").addEventListener("change", function () {
+        // take the date chosen
         var selectedDate = this.value;
-        var empIdChosen = document.getElementById("emp_id_chosen").value;
-        // Gọi phương thức GetBookedTimes trong controller bằng cách sử dụng AJAX
+        var empIdChosen = document.getElementById("hairdresserDropdown").value;
+        // call GetBookedTimes in controller by using AJAX
         get(selectedDate, empIdChosen)
 
     });
 
-    document.getElementById("emp_id_chosen").addEventListener("change", function () {
-        // Lấy ngày được chọn
+    document.getElementById("hairdresserDropdown").addEventListener("change", function () {
+        // take the date chosen
         var empIdChosen = this.value;
-        var selectedDate = document.getElementById("date").value;
-        // Gọi phương thức GetBookedTimes trong controller bằng cách sử dụng AJAX
+        var selectedDate = document.getElementById("dateInput").value;
+        // call GetBookedTimes in controller by using AJAX
         get(selectedDate, empIdChosen)
 
     });
+
 
     function get(selectedDate, empIdChosen) {
         fetch('/Appointment/GetBookedTimes?selectedDate=' + selectedDate + '&empIdChosen=' + empIdChosen)
             .then(response => response.json())
             .then(bookedTimes => {
-                // Đánh dấu các thời gian đã được đặt như là disabled trong dropdown
+                // mark the time booked is disabled in dropdown
                 var timeDropdown = document.getElementById("timeDropdown");
                 var options = timeDropdown.options;
 
