@@ -371,6 +371,7 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
                         current_app.emp_id_chosen = appointment.emp_id_chosen;
                         current_app.finish_time = appointment.finish_time;
                         current_app.booking_time = appointment.booking_time;
+                        current_app.date = appointment.date;
                         current_app.user_id_book = appointment.user_id_book;
                         current_app.ser_id = appointment.ser_id;
 
