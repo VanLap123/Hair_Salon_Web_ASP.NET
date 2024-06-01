@@ -374,8 +374,6 @@ namespace Hair_Salon_Web_ASP.NET.Controllers
                         current_app.date = appointment.date;
                         current_app.user_id_book = appointment.user_id_book;
                         current_app.ser_id = appointment.ser_id;
-
-                        current_app.status = "Booking successfully";
                         _db.Update(current_app);
                         _db.SaveChanges();
                         return RedirectToAction(nameof(Index));
